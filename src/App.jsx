@@ -60,26 +60,30 @@ function App() {
 
     const TrueOrFalseForm = () => {
       return (
-        <form onSubmit={handleSubmit} className="space-y-2">
-          <input type="hidden" name="taskId" value={taskId} />
-          <input type="hidden" name="userId" value={userId} />
-          <fieldset>
-            <legend>{question}</legend>
-            <ul>
-              { options.map((option) => (
-                <li className="flex justify-between w-1/2">
-                  <label htmlFor={option}>{option}</label>
-                  <input id={option}
-                         type="radio"
-                         name="input"
-                         value={option} />
-                </li>
-              )) }
-            </ul>
-          </fieldset>
+        <>
+          <script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
+          <form method="post" id="mturk_form" action="https://workersandbox.mturk.com/mturk/externalSubmit" onSubmit={handleSubmit} className="space-y-2">
+            <input type="hidden" name="taskId" value={taskId} />
+            <input type="hidden" name="userId" value={userId} />
+            <fieldset>
+              <legend>{question}</legend>
+              <ul>
+                { options.map((option) => (
+                  <li className="flex justify-between w-1/2">
+                    <label htmlFor={option}>{option}</label>
+                    <input id={option}
+                           type="radio"
+                           name="input"
+                           value={option} />
+                  </li>
+                )) }
+              </ul>
+            </fieldset>
 
-          {submitted ? <LoadingButton /> : <SubmitButton />}
-        </form>
+            {submitted ? <LoadingButton /> : <SubmitButton />}
+          </form>
+          <script language='Javascript'>turkSetAssignmentID()</script>
+        </>
       )
     }
 
