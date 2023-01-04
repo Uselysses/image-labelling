@@ -2,25 +2,21 @@ import { useState } from 'react'
 
 function App() {
   const trueOrFalseProps = {
-    taskId: "22",
-    userId: "1",
     imageUrl: "https://media.istockphoto.com/id/1130731707/photo/hot-dog-on-white.jpg?s=612x612&w=0&k=20&c=QI_McOEiNf7lcxx_kq7_LUXJIrBWNMlfqdwDK4JcbvY=",
     question: "Is this a hotdog?",
     options: ["Yes", "No"]
   }
 
-  const output = {
-    taskId: "22",
-    userId: "1",
-    answer: "Yes"
-  }
-
-  const Task = ({ taskId, userId, imageUrl, question, options }) => {
+  const Task = ({ imageUrl, question, options }) => {
     const [submitted, setSubmitted] = useState(false)
 
     const handleSubmit = (event) => {
-      console.log(event.target.taskId.value)
-      console.log(event.target.userId.value)
+      const urlParams = new URLSearchParams(window.location.search)
+      document.getElementById('assignmentId').value = urlParams.get('assignmentId')
+      document.getElementById('workerId').value = urlParams.get('workerId')
+      document.getElementById('taskId').value = urlParams.get('hitId')
+      console.log(event.target.assignmentId.value)
+      console.log(event.target.workerId.value)
       console.log(event.target.input.value)
 
       setSubmitted(true)
@@ -61,10 +57,11 @@ function App() {
     const TrueOrFalseForm = () => {
       return (
         <>
-          <script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
           <form method="post" id="mturk_form" action="https://workersandbox.mturk.com/mturk/externalSubmit" onSubmit={handleSubmit} className="space-y-2">
-            <input type="hidden" name="taskId" value={taskId} />
-            <input type="hidden" name="userId" value={userId} />
+            <input type="hidden" id="assignmentId" name="assignmentId" />
+            <input type="hidden" id="userId" name="userId" />
+            <input type="hidden" id="taskId" name="taskId" />
+
             <fieldset>
               <legend>{question}</legend>
               <ul>
@@ -82,7 +79,6 @@ function App() {
 
             {submitted ? <LoadingButton /> : <SubmitButton />}
           </form>
-          <script language='Javascript'>turkSetAssignmentID()</script>
         </>
       )
     }
@@ -90,7 +86,7 @@ function App() {
     return (
       <div className="w-3/4 md:w-1/2 mx-auto mt-20 md:grid md:grid-cols-2 md:gap-16">
         <img src={imageUrl} />
-        <div className="">
+        <div>
           <TrueOrFalseForm />
         </div>
       </div>
